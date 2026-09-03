@@ -1,0 +1,10 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "functions": {
+    "api/generate-tree.py": {
+      "runtime": "python3.12"
+    }
+  }
+}
