@@ -15,7 +15,7 @@ load_dotenv()
 app = FastAPI(title="Saplings API")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["*"],
     allow_methods=["POST"],
     allow_headers=["Content-Type"],
 )
