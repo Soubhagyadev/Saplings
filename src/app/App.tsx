@@ -1,7 +1,11 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { FlashcardModal } from '../components/flashcards/FlashcardModal'
+import { TopicTree } from '../components/tree/TopicTree'
 import { extractPdfText } from '../services/parsePdf'
+import { generateStudyTree } from '../services/studyTree'
+import type { TopicNode } from '../types/study'
 
-type ImportStatus = 'idle' | 'parsing' | 'ready' | 'error'
+type ImportStatus = 'idle' | 'parsing' | 'ready' | 'generating' | 'error'
 
 export function App() {
   const [file, setFile] = useState<File | null>(null)
@@ -9,7 +13,10 @@ export function App() {
   const [status, setStatus] = useState<ImportStatus>('idle')
   const [text, setText] = useState('')
   const [error, setError] = useState('')
+  const [tree, setTree] = useState<TopicNode | null>(null)
+  const [activeTopic, setActiveTopic] = useState<TopicNode | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const totalCharacterCount = Array.from(text).length
 
   useEffect(() => () => {
     if (previewUrl) URL.revokeObjectURL(previewUrl)
@@ -27,6 +34,8 @@ export function App() {
     setStatus('parsing')
     setError('')
     setText('')
+    setTree(null)
+    setActiveTopic(null)
 
     try {
       const extractedText = await extractPdfText(fileToImport)
@@ -41,6 +50,19 @@ export function App() {
   function onFileChange(event: ChangeEvent<HTMLInputElement>) {
     const selectedFile = event.target.files?.[0]
     if (selectedFile) void handleFile(selectedFile)
+  }
+
+  async function handleGenerateTree() {
+    if (!text) return
+    setStatus('generating')
+    setError('')
+    try {
+      setTree(await generateStudyTree(text))
+      setStatus('ready')
+    } catch (generationError) {
+      setStatus('error')
+      setError(generationError instanceof Error ? generationError.message : 'Could not generate the study tree.')
+    }
   }
 
   return (
@@ -87,8 +109,13 @@ export function App() {
         {status !== 'idle' && (
           <div className={'parse-status ' + status}>
             <span className="status-dot" />
-            <span>{status === 'parsing' && 'READING YOUR PDF…'}{status === 'ready' && text.length.toLocaleString() + ' CHARACTERS READY FOR AI'}{status === 'error' && error}</span>
+            <span>{status === 'parsing' && 'READING YOUR PDF…'}{status === 'generating' && 'GROWING YOUR TOPIC TREE WITH GEMINI…'}{status === 'ready' && 'TOTAL EXTRACTED: ' + totalCharacterCount.toLocaleString() + ' CHARACTERS'}{status === 'error' && error}</span>
           </div>
+        )}
+        {status === 'ready' && !tree && (
+          <button className="generate-button" onClick={() => void handleGenerateTree()}>
+            GROW MY STUDY TREE <span>→</span>
+          </button>
         )}
       </section>
 
@@ -113,6 +140,22 @@ export function App() {
           )}
         </div>
       </section>
+
+      {tree && (
+        <section className="tree-section" aria-labelledby="tree-title">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">02 / EXPLORE THE BRANCHES</p>
+              <h2 id="tree-title">TOPIC TREE</h2>
+            </div>
+            <button className="regenerate-button" onClick={() => void handleGenerateTree()}>REGENERATE</button>
+          </div>
+          <p className="tree-guide">HOVER A BOX TO PREVIEW A CARD. CLICK A BOX TO STUDY. USE + / − TO TOGGLE BRANCHES.</p>
+          <TopicTree tree={tree} onOpenCards={setActiveTopic} />
+        </section>
+      )}
+
+      <FlashcardModal topic={activeTopic} onClose={() => setActiveTopic(null)} />
     </main>
   )
 }

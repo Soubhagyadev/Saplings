@@ -28,6 +28,8 @@ src/
   types/        Shared TypeScript models
   hooks/        Reusable React hooks
   lib/          Utilities and constants
+server/
+  app.py        FastAPI endpoint that keeps the Gemini key server-side
 ```
 
 ## Setup completed
@@ -45,6 +47,18 @@ src/
 2. The browser previews that PDF in the section below.
 3. The PDF parser extracts text from every page.
 4. The interface reports the character count ready for AI.
+
+## Topic tree and flashcards
+
+- The Generate button sends extracted text to the local Gemini API endpoint.
+- Gemini returns a nested topic/flashcard JSON tree.
+- The tree supports expandable branches, hover card previews, and click-to-open flashcards.
+- Flashcard arrows appear when a selected topic has more than one card.
+
+## Run locally
+
+- Run npm run dev:api to start the Gemini backend on port 8000.
+- Run npm run dev in another terminal to start the React interface.
 
 ## Main Files We Would Be Working On 
 

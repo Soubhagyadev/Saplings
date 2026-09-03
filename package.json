@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "python3 -m uvicorn server.app:app --reload",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },
