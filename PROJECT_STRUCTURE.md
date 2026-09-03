@@ -7,6 +7,7 @@ Saplings is an AI-powered study tool that turns pasted notes or lecture PDFs int
 - React for the interface
 - TypeScript for typed application code
 - Vite for local development and production builds
+- PDF.js for browser-side PDF text extraction
 
 ## Project structure
 
@@ -32,9 +33,18 @@ src/
 ## Setup completed
 
 - Added a Vite + React + TypeScript entry point and configuration.
-- Added a minimal `App` component and global stylesheet.
+- Built the first neo-brutalist green/yellow import page and global stylesheet.
+- Added PDF selection, in-browser document preview, and client-side text extraction.
+- The extracted text is held in page state, ready for the future AI topic-generation service.
 - Added `.gitignore` rules for dependencies, builds, local environment files, logs, and editor files.
 - Preserved `main.js` as the existing starter file; the application entry is `src/main.tsx`.
+
+## Current import flow
+
+1. Student chooses a PDF in the top import section.
+2. The browser previews that PDF in the section below.
+3. The PDF parser extracts text from every page.
+4. The interface reports the character count ready for AI.
 
 ## Main Files We Would Be Working On 
 

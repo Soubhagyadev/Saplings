@@ -1,2 +1,48 @@
-:root { font-family: Inter, system-ui, sans-serif; color: #193328; background: #f7f8f2; }
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root { font-family: 'Space Grotesk', sans-serif; color: #171817; background: #f8f5e9; }
+* { box-sizing: border-box; }
 body { margin: 0; }
+button { font: inherit; }
+.app-shell { max-width: 1050px; min-height: 100vh; margin: 0 auto; padding: 0 28px 64px; overflow: hidden; }
+.topbar { height: 94px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #171817; }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: inherit; font: 500 17px 'DM Mono', monospace; text-decoration: none; letter-spacing: -.05em; }
+.brand-mark { display: grid; width: 34px; height: 34px; place-items: center; color: #f8f5e9; background: #246b41; border: 2px solid #171817; box-shadow: 3px 3px 0 #171817; font: 20px 'Archivo Black', sans-serif; }
+.topbar p, .eyebrow, .step-label, .page-tag { margin: 0; font: 500 11px 'DM Mono', monospace; letter-spacing: .06em; }
+.profile-button { width: 38px; height: 38px; cursor: pointer; border: 2px solid #171817; border-radius: 50%; background: #f6d84c; font: 700 12px 'DM Mono', monospace; box-shadow: 3px 3px 0 #171817; }
+.hero { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: 66px 8px 54px; }
+.eyebrow { color: #246b41; font-weight: 500; }
+h1, h2 { margin: 8px 0 0; font-family: 'Archivo Black', sans-serif; letter-spacing: -.065em; }
+h1 { max-width: 700px; font-size: clamp(42px, 7vw, 76px); line-height: .94; }
+h1 em { color: #246b41; font-style: normal; -webkit-text-stroke: 1px #171817; text-shadow: 4px 4px 0 #f6d84c; }
+.intro { max-width: 530px; margin: 25px 0 0; font-size: 17px; line-height: 1.45; }
+.hero-sticker { display: grid; flex: 0 0 146px; width: 146px; height: 146px; place-content: center; position: relative; rotate: 7deg; text-align: center; background: #f6d84c; border: 3px solid #171817; box-shadow: 7px 7px 0 #171817; font: 18px/1 'Archivo Black', sans-serif; }
+.hero-sticker span { position: absolute; top: 9px; right: 13px; font-size: 26px; }
+.import-section, .preview-section { border: 3px solid #171817; box-shadow: 8px 8px 0 #171817; }
+.import-section { padding: 26px; background: #cce87a; }
+.section-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+h2 { font-size: 31px; line-height: 1; }
+.step-label, .page-tag { padding: 7px 9px; border: 2px solid #171817; background: #f8f5e9; }
+.dropzone { display: flex; width: 100%; align-items: center; gap: 18px; margin-top: 25px; padding: 19px; cursor: pointer; text-align: left; color: #171817; border: 3px dashed #171817; background: #f8f5e9; transition: transform .15s, box-shadow .15s; }
+.dropzone:hover { transform: translate(-3px, -3px); box-shadow: 5px 5px 0 #171817; }
+.upload-icon { display: grid; flex: 0 0 52px; width: 52px; height: 52px; place-items: center; color: #f8f5e9; border: 2px solid #171817; background: #246b41; font-size: 39px; line-height: 1; }
+.dropzone-copy { display: grid; gap: 5px; min-width: 0; }
+.dropzone-copy strong { overflow: hidden; font-size: 15px; white-space: nowrap; text-overflow: ellipsis; }
+.dropzone-copy small { font: 12px 'DM Mono', monospace; }
+.browse-button { margin-left: auto; padding: 10px 13px; border: 2px solid #171817; background: #f6d84c; font: 500 12px 'DM Mono', monospace; }
+.parse-status { display: flex; gap: 9px; align-items: center; margin-top: 16px; font: 500 11px 'DM Mono', monospace; }
+.status-dot { width: 11px; height: 11px; border: 2px solid #171817; background: #f6d84c; }
+.parse-status.parsing .status-dot { animation: blink .7s alternate infinite; }
+.parse-status.ready .status-dot { background: #246b41; }
+.parse-status.error { color: #a51414; }
+.parse-status.error .status-dot { background: #e65d43; }
+.preview-section { margin-top: 55px; padding: 26px; background: #f6d84c; }
+.pdf-frame { display: grid; min-height: 380px; margin-top: 25px; overflow: hidden; border: 3px solid #171817; background: #e4e1d6; }
+.pdf-frame iframe { width: 100%; height: 570px; border: 0; background: white; }
+.empty-preview { display: grid; max-width: 380px; place-self: center; text-align: center; }
+.empty-preview span { color: #246b41; font: 86px/1 Georgia, serif; }
+.empty-preview p { margin: 8px 0; font: 19px 'Archivo Black', sans-serif; }
+.empty-preview small { font: 13px/1.4 'DM Mono', monospace; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+@keyframes blink { to { opacity: .2; } }
+@media (max-width: 650px) { .app-shell { padding: 0 16px 40px; } .topbar p, .hero-sticker { display: none; } .hero { padding: 45px 0; } .import-section, .preview-section { padding: 18px; box-shadow: 5px 5px 0 #171817; } h2 { font-size: 24px; } .dropzone { align-items: flex-start; } .browse-button { display: none; } .pdf-frame { min-height: 280px; } }
