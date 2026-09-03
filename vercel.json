@@ -4,7 +4,7 @@
   "framework": "vite",
   "functions": {
     "api/generate-tree.py": {
-      "runtime": "python3.12"
+      "runtime": "vercel-python@4.3.1"
     }
   }
 }
