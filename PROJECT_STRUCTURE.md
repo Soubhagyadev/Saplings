@@ -35,3 +35,16 @@ src/
 - Added a minimal `App` component and global stylesheet.
 - Added `.gitignore` rules for dependencies, builds, local environment files, logs, and editor files.
 - Preserved `main.js` as the existing starter file; the application entry is `src/main.tsx`.
+
+## Main Files We Would Be Working On 
+
+Main files you’ll work in:
+- src/app/App.tsx — main page layout and navigation
+- src/features/import/ — paste notes / PDF upload
+- src/features/topics/ — generate and manage the collapsible topic tree
+- src/features/study/ — flashcard review and export flow
+- src/components/tree/ — visual tree UI
+- src/components/flashcards/ — flip-card UI
+- src/services/ — PDF parsing and AI API calls
+- src/types/ — Topic, Flashcard, and document data types
+Start with src/app/App.tsx, then build components/tree/ and components/flashcards/.
