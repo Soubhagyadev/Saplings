@@ -22,7 +22,6 @@ function TreeNode({ node, level, onOpenCards }: { node: TopicNode; level: number
           className="tree-box"
           onClick={() => cardCount > 0 && onOpenCards(node)}
           disabled={cardCount === 0}
-          title={cardCount > 0 ? node.flashcards[0].question : 'This topic has no cards yet'}
         >
           {hasChildren && (
             <span className="expand-toggle" onClick={(event) => { event.stopPropagation(); setIsOpen(!isOpen) }} role="button" tabIndex={0} aria-label={isOpen ? 'Collapse topic' : 'Expand topic'}>
@@ -31,7 +30,12 @@ function TreeNode({ node, level, onOpenCards }: { node: TopicNode; level: number
           )}
           <span className="tree-title">{node.title}</span>
           {cardCount > 0 && <span className="card-count">{cardCount} {cardCount === 1 ? 'CARD' : 'CARDS'}</span>}
-          {cardCount > 0 && <span className="hover-card">HOVER: {node.flashcards[0].question}</span>}
+          {cardCount > 0 && (
+            <span className="hover-card">
+              <strong>{node.flashcards[0].question}</strong>
+              <small>{node.flashcards[0].answer}</small>
+            </span>
+          )}
         </button>
       </div>
       {hasChildren && isOpen && <div className="tree-children">{node.children.map((child) => <TreeNode key={child.id} node={child} level={level + 1} onOpenCards={onOpenCards} />)}</div>}

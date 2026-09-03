@@ -54,6 +54,7 @@ server/
 - Gemini returns a nested topic/flashcard JSON tree.
 - The tree supports expandable branches, hover card previews, and click-to-open flashcards.
 - Flashcard arrows appear when a selected topic has more than one card.
+- One Export All to Anki button downloads every card in the tree as an Anki-ready CSV.
 
 ## Run locally
 

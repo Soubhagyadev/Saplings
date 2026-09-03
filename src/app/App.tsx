@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { FlashcardModal } from '../components/flashcards/FlashcardModal'
 import { TopicTree } from '../components/tree/TopicTree'
+import { exportTreeToAnki } from '../services/exportAnki'
 import { extractPdfText } from '../services/parsePdf'
 import { generateStudyTree } from '../services/studyTree'
 import type { TopicNode } from '../types/study'
@@ -15,8 +16,19 @@ export function App() {
   const [error, setError] = useState('')
   const [tree, setTree] = useState<TopicNode | null>(null)
   const [activeTopic, setActiveTopic] = useState<TopicNode | null>(null)
+  const [viewCounts, setViewCounts] = useState<Record<string, number>>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('saplings-card-views') ?? '{}') as Record<string, number>
+    } catch {
+      return {}
+    }
+  })
   const inputRef = useRef<HTMLInputElement>(null)
   const totalCharacterCount = Array.from(text).length
+
+  useEffect(() => {
+    localStorage.setItem('saplings-card-views', JSON.stringify(viewCounts))
+  }, [viewCounts])
 
   useEffect(() => () => {
     if (previewUrl) URL.revokeObjectURL(previewUrl)
@@ -36,6 +48,7 @@ export function App() {
     setText('')
     setTree(null)
     setActiveTopic(null)
+    setViewCounts({})
 
     try {
       const extractedText = await extractPdfText(fileToImport)
@@ -63,6 +76,15 @@ export function App() {
       setStatus('error')
       setError(generationError instanceof Error ? generationError.message : 'Could not generate the study tree.')
     }
+  }
+
+  function openTopicCards(topic: TopicNode) {
+    setViewCounts((current) => ({ ...current, [topic.id + '-0']: (current[topic.id + '-0'] ?? 0) + 1 }))
+    setActiveTopic(topic)
+  }
+
+  function recordCardView(cardKey: string) {
+    setViewCounts((current) => ({ ...current, [cardKey]: (current[cardKey] ?? 0) + 1 }))
   }
 
   return (
@@ -148,14 +170,22 @@ export function App() {
               <p className="eyebrow">02 / EXPLORE THE BRANCHES</p>
               <h2 id="tree-title">TOPIC TREE</h2>
             </div>
-            <button className="regenerate-button" onClick={() => void handleGenerateTree()}>REGENERATE</button>
+            <div className="tree-actions">
+              <button className="export-button" onClick={() => exportTreeToAnki(tree)}>EXPORT ALL TO ANKI</button>
+              <button className="regenerate-button" onClick={() => void handleGenerateTree()}>REGENERATE</button>
+            </div>
           </div>
           <p className="tree-guide">HOVER A BOX TO PREVIEW A CARD. CLICK A BOX TO STUDY. USE + / − TO TOGGLE BRANCHES.</p>
-          <TopicTree tree={tree} onOpenCards={setActiveTopic} />
+          <TopicTree tree={tree} onOpenCards={openTopicCards} />
         </section>
       )}
 
-      <FlashcardModal topic={activeTopic} onClose={() => setActiveTopic(null)} />
+      <FlashcardModal
+        topic={activeTopic}
+        onClose={() => setActiveTopic(null)}
+        viewCounts={viewCounts}
+        onViewCard={recordCardView}
+      />
     </main>
   )
 }
