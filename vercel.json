@@ -1,10 +1,5 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "framework": "vite",
-  "functions": {
-    "api/generate-tree.py": {
-      "runtime": "vercel-python@4.3.1"
-    }
-  }
+  "framework": "vite"
 }
